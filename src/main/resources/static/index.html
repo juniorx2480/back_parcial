@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Gestión de Empresas</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-logo">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2"/>
+            <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+          </svg>
+        </div>
+        <div>
+          <h1>Sistema de Gestión de Empresas</h1>
+          <p class="subtitle">Parcial Final · Enunciado 2 · Empresas y Empleados</p>
+        </div>
+      </div>
+      <div class="status-indicator" id="statusIndicator">
+        <span class="status-dot"></span>
+        <span id="statusText">Conectando...</span>
+      </div>
+    </header>
+
+    <!-- Mensajes -->
+    <div id="alertContainer"></div>
+
+    <!-- Formulario -->
+    <section class="card form-card">
+      <div class="card-header">
+        <h2>Registrar nueva empresa</h2>
+        <p>Completa los datos para insertar una empresa en la base de datos.</p>
+      </div>
+      <form id="empresaForm" class="form-grid">
+        <div class="form-group">
+          <label for="nombre">Nombre <span class="required">*</span></label>
+          <input type="text" id="nombre" name="nombre" placeholder="Ej: Tecnologías Innovadoras S.A.S" required>
+        </div>
+        <div class="form-group">
+          <label for="nit">NIT <span class="required">*</span></label>
+          <input type="text" id="nit" name="nit" placeholder="Ej: 900123456-7" required>
+        </div>
+        <div class="form-group">
+          <label for="ciudad">Ciudad <span class="required">*</span></label>
+          <input type="text" id="ciudad" name="ciudad" placeholder="Ej: Bogotá" required>
+        </div>
+        <div class="form-group">
+          <label for="sector">Sector <span class="required">*</span></label>
+          <input type="text" id="sector" name="sector" placeholder="Ej: Tecnología" required>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="submitBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Registrar empresa
+          </button>
+          <button type="button" class="btn btn-secondary" id="clearBtn">Limpiar</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Formulario Empleados -->
+    <section class="card form-card">
+      <div class="card-header">
+        <h2>Crear empleado</h2>
+        <p>Selecciona una empresa y registra un empleado asociado.</p>
+      </div>
+      <form id="empleadoForm" class="form-grid">
+        <div class="form-group">
+          <label for="empresaId">Empresa <span class="required">*</span></label>
+          <select id="empresaId" name="empresaId" required>
+            <option value="">Cargando empresas...</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="empleadoNombre">Nombre <span class="required">*</span></label>
+          <input type="text" id="empleadoNombre" name="empleadoNombre" placeholder="Ej: Juan Pérez" required>
+        </div>
+        <div class="form-group">
+          <label for="cargo">Cargo <span class="required">*</span></label>
+          <input type="text" id="cargo" name="cargo" placeholder="Ej: Analista" required>
+        </div>
+        <div class="form-group">
+          <label for="correo">Correo <span class="required">*</span></label>
+          <input type="email" id="correo" name="correo" placeholder="Ej: juan@correo.com" required>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="submitEmpleadoBtn">Crear empleado</button>
+          <button type="button" class="btn btn-secondary" id="clearEmpleadoBtn">Limpiar</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Tabla -->
+    <section class="card table-card">
+      <div class="card-header">
+        <div>
+          <h2>Empresas registradas</h2>
+          <p>Listado de todas las empresas almacenadas en PostgreSQL.</p>
+        </div>
+        <button class="btn btn-outline" id="refreshBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"/>
+            <polyline points="1 20 1 14 7 14"/>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+          </svg>
+          Recargar
+        </button>
+      </div>
+
+      <div id="tableContainer">
+        <div class="loading-state">Cargando empresas...</div>
+      </div>
+    </section>
+
+    <!-- Tabla Empleados -->
+    <section class="card table-card">
+      <div class="card-header">
+        <div>
+          <h2>Empleados registrados</h2>
+          <p>Listado de todos los empleados guardados en PostgreSQL.</p>
+        </div>
+        <button class="btn btn-outline" id="refreshEmpleadosBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"/>
+            <polyline points="1 20 1 14 7 14"/>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+          </svg>
+          Recargar
+        </button>
+      </div>
+
+      <div id="empleadosContainer">
+        <div class="loading-state">Cargando empleados...</div>
+      </div>
+    </section>
+
+    <footer class="app-footer">
+      <p>Backend: Spring Boot · Base de datos: PostgreSQL · Frontend: HTML/CSS/JS</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

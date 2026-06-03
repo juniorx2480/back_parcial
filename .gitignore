@@ -1,0 +1,22 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+.idea
+*.iws
+*.iml
+*.ipr
+.vscode/
+.settings/
+.project
+.classpath
+
+# H2 database files
+data/
+*.mv.db
+*.trace.db
+*.lock.db
+
+# Logs
+*.log
